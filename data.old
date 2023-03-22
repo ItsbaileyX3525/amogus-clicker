@@ -5,5 +5,7 @@
     "susGen1Cost": 100,
     "susGen1Bought": 0,
     "susGen2Cost": 450,
-    "susGen2Bought": 0
+    "susGen2Bought": 0,
+    "susGen3Bought": 0,
+    "susGen3Cost": 1000
 }

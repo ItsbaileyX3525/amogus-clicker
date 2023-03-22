@@ -128,6 +128,7 @@ def shop():
         shopIcon.animate_position([4,0], duration=1.3)
         Gen1.animate_position([.8,.2], duration=1.3)
         Gen2.animate_position([.8,0], duration=1.3)
+        Gen3.animate_position([.8,-0.2], duration=1.3)
         shop_background.animate_position([7.5,0], duration=1.3)
         prestige.animate_position([.8,.4], duration=1.3)
         shopButton.x=.49
@@ -137,6 +138,7 @@ def shop():
         shopIcon.animate_position([6,0], duration=1.3)
         Gen1.animate_position([1,.2], duration=1.3)
         Gen2.animate_position([1,0], duration=1.3)
+        Gen3.animate_position([1,0], duration=1.3)
         shop_background.animate_position([9,0], duration=1.3)
         prestige.animate_position([1,.4], duration=1.3)
         shopButton.x=.73
@@ -157,11 +159,15 @@ def Prestige():
         Gen1.bought=0
         Gen2.cost=450
         Gen2.bought=0
+        Gen3.cost=1000
+        Gen3.bought=0
         data['suses'] = 0
         data['susGen1Cost']=100
         data['susGen1Bought']=0
         data['susGen2Cost']=450
         data['susGen2Bought']=0
+        data['susGen3Cost']=1000
+        data['susGen3Bought']=0
         PresCost+=round(5000*1.1)
         multiplier+=1
         shopIcon.visible=False
@@ -202,6 +208,8 @@ Gen1Cost=data['susGen1Cost']
 Gen1Bought=data['susGen1Bought']
 Gen2Bought=data['susGen2Bought']
 Gen2Cost=data['susGen2Cost']
+Gen3Bought=data['susGen3Bought']
+Gen3Cost=data['susGen3Cost']
 
 Prestiging=False
 inMenu=False
@@ -216,6 +224,7 @@ shopButton=Button(icon=None,x=.73,z=-1,scale=.12,pressed_color=color.clear,color
 
 Gen1=Gen(default_cost=100,susmaker=1,cost=Gen1Cost,icon='assets/Green.png',position=(1,.2,0),bought=Gen1Bought)
 Gen2=Gen(default_cost=450,susmaker=3,cost=Gen2Cost,icon='assets/Blue.png',position=(1,0,0),bought=Gen2Bought)
+Gen3=Gen(default_cost=1000,susmaker=5,cost=Gen3Cost,icon='assets/pink.png',position=(1,-.2,0),bought=Gen3Bought)
 
 prestige=Button(text='Prestige',icon='assets/pres logo.png',scale=.15,position=(1,.4,0),color=color.clear,hightlight=color.clear,pressed_color=color.clear,on_click=Prestige)
 prestige.text_entity.y=-.2
@@ -234,8 +243,10 @@ shop_background=Entity(model='quad',color=color.black66,x=9,scale_x=2,scale_y=12
 start_loading_animation('assets/will.gif',name="animation")
 black=Entity(model='quad',color=color.black,scale=.000000001,z=-4)
 
+
 #game functions
 def input(key):
+
     if held_keys['control'] and held_keys['shift'] and key=='m':
         data['suses'] = 0
         data['multiplier']=1
@@ -244,6 +255,11 @@ def input(key):
         data['susGen1Bought']=0
         data['susGen2Cost']=450
         data['susGen2Bought']=0
+        data['susGen3Cost']=1000
+        data['susGen3Bought']=0
+    if held_keys['k'] and held_keys['i'] and key=='d':
+        #application.paused=True
+        pass
 
 def update():
     global prestige
@@ -258,6 +274,8 @@ def update():
     data['susGen1Bought']=Gen1.bought
     data['susGen2Cost']=Gen2.cost
     data['susGen2Bought']=Gen2.bought
+    data['susGen3Cost']=Gen3.cost
+    data['susGen3Bought']=Gen3.bought
     with open("data.json", "w") as f:
         json.dump(data, f,indent=4)
     suses_text.text=f"suses: {suses}"
