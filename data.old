@@ -7,5 +7,6 @@
     "susGen2Cost": 450,
     "susGen2Bought": 0,
     "susGen3Bought": 0,
-    "susGen3Cost": 1000
+    "susGen3Cost": 1000,
+    "EE": false
 }

@@ -131,6 +131,8 @@ def shop():
         Gen3.animate_position([.8,-0.2], duration=1.3)
         shop_background.animate_position([7.5,0], duration=1.3)
         prestige.animate_position([.8,.4], duration=1.3)
+        NextPageButton.visible=True
+        PreviousPageButton.visible=True
         shopButton.x=.49
         inMenu=True
     else:
@@ -138,13 +140,25 @@ def shop():
         shopIcon.animate_position([6,0], duration=1.3)
         Gen1.animate_position([1,.2], duration=1.3)
         Gen2.animate_position([1,0], duration=1.3)
-        Gen3.animate_position([1,0], duration=1.3)
+        Gen3.animate_position([1,-.2], duration=1.3)
         shop_background.animate_position([9,0], duration=1.3)
         prestige.animate_position([1,.4], duration=1.3)
+        PreviousPageButton.visible=False
+        NextPageButton.visible=True
         shopButton.x=.73
         inMenu=False
 
+def NextPage():
+    global currentPage
+    if currentPage<2:
+        currentPage+=1
+        print("Next pressed")
 
+def PreviousPage():
+    global currentPage
+    if currentPage>1:
+        currentPage-=1
+        print("Previous pressed")
 
 def Prestige():
     global suses,multiplier,PresCost,Prestiging
@@ -191,6 +205,7 @@ def after_pres():
     suses_text.visible=True
     susClicker.visible=True
     susClicker.disabled=False
+
 #Ursina
 app=Ursina()
 
@@ -201,6 +216,7 @@ window.title="Sus clicker"
 window.exit_button.enabled = False
 
 #Variables
+secret=data['EE']
 suses=data['suses']
 multiplier=data['multiplier']
 PresCost=data['PrestiegeCost']
@@ -213,38 +229,46 @@ Gen3Cost=data['susGen3Cost']
 
 Prestiging=False
 inMenu=False
+currentPage=1
 
-#Buttons and there stuff
+##Buttons and there stuff
+
+#Sus clicker stuff
 suses_text=Text(text=f"suses: {suses}",y=.4,x=-.05)
 suses_text.create_background()
 susClicker=Button(parent=camera.ui,icon='assets/Red.png',scale=.15,x=-.3,color=color.clear,highlight_color=color.clear,pressed_color=color.clear,on_click=sus_click)
 
-shopIcon=Entity(model='quad',texture='shop.png',scale=1,x=6)
+#Shop stuff
+shopIcon=Entity(model='quad',texture='assets/shop.png',scale=1,x=6)
 shopButton=Button(icon=None,x=.73,z=-1,scale=.12,pressed_color=color.clear,color=color.clear,hightlight_color=color.clear,on_click=shop)
+NextPageButton=Button(icon="assets/shop.png",x=.85,y=-.4,z=-1,rotation_z=180,visible=False,scale=.07,pressed_color=color.clear,color=color.clear,hightlight_color=color.clear,on_click=NextPage)
+PreviousPageButton=Button(icon="assets/shop.png",x=.78,y=-.4,z=-1,scale=.07,visible=False,pressed_color=color.clear,color=color.clear,hightlight_color=color.clear,on_click=PreviousPage)
 
+#Gen stuff
 Gen1=Gen(default_cost=100,susmaker=1,cost=Gen1Cost,icon='assets/Green.png',position=(1,.2,0),bought=Gen1Bought)
 Gen2=Gen(default_cost=450,susmaker=3,cost=Gen2Cost,icon='assets/Blue.png',position=(1,0,0),bought=Gen2Bought)
 Gen3=Gen(default_cost=1000,susmaker=5,cost=Gen3Cost,icon='assets/pink.png',position=(1,-.2,0),bought=Gen3Bought)
 
+#Prestige stuff
 prestige=Button(text='Prestige',icon='assets/pres logo.png',scale=.15,position=(1,.4,0),color=color.clear,hightlight=color.clear,pressed_color=color.clear,on_click=Prestige)
 prestige.text_entity.y=-.2
 prestige.tooltip=Tooltip(f'buy for <green>{PresCost} suses')
 
-#Audio
+##Audio
 app.taskMgr.add(LoadAudio(path="assets/bg_music.ogg",name='BgMusic',autoplay=True,loop=True))
 app.taskMgr.add(LoadAudio(path="assets/menupop.ogg",name='MenuClick',autoplay=False,loop=False))
 app.taskMgr.add(LoadAudio(path="assets/PrestigeMusic.ogg",name='PrestigeSong',autoplay=False,loop=False))
 
-#Background stuff
+##Background stuff
 bg=Entity(model='quad',texture='assets/bg.mp4',scale_x=90,scale_y=49.5,z=100)
 
-#Misc things
+##Misc things
 shop_background=Entity(model='quad',color=color.black66,x=9,scale_x=2,scale_y=12,z=2)
 start_loading_animation('assets/will.gif',name="animation")
 black=Entity(model='quad',color=color.black,scale=.000000001,z=-4)
 
 
-#game functions
+##game functions
 def input(key):
 
     if held_keys['control'] and held_keys['shift'] and key=='m':
@@ -259,7 +283,8 @@ def input(key):
         data['susGen3Bought']=0
     if held_keys['k'] and held_keys['i'] and key=='d':
         #application.paused=True
-        pass
+        print_on_screen("Secret unlocked!")
+        secret=True
 
 def update():
     global prestige
