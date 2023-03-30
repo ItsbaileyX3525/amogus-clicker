@@ -56,8 +56,11 @@ class Gen(Button):
         self.highlight_color=color.clear
         self.pressed_color=color.clear
         self.on_click=self.bought_gen
+        self.isGen=False
         self.tooltip=Tooltip(f'Buy for <green>{self.cost} suses')
-        self.save_data()
+        if self.bought>=1:
+            self.IsGen=True
+            self.generate_sus()
     def update(self):
         if suses>=self.cost:
             self.icon=self.can_buy
@@ -73,21 +76,18 @@ class Gen(Button):
             suses-=self.cost
             self.bought+=1
             self.cost+=round(self.default_cost+25)
-            self.generate_sus()
+            if not self.isGen:
+                self.generate_sus()
+        
         else:
             print_on_screen("Not enough sus!")
     def generate_sus(self):
         global suses
         if not Prestiging:
-            suses+=round(self.susmaker+multiplier)
+            suses+=round(self.susmaker+multiplier*self.bought)
             invoke(self.generate_sus,delay=1)
         else:
             pass
-
-    def save_data(self):
-        if self.bought>=1:
-            for i in range(self.bought):
-                self.generate_sus()
 
 
 
